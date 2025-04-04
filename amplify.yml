@@ -4,7 +4,29 @@ backend:
     build:
       commands:
         - npm ci --cache .npm --prefer-offline
+
+        - echo "Setting up .env for Lambda function agentHandler..."
+        - cd amplify/functions/agentHandler
+
+        # Clear old .env if it exists
+        - rm -f .env
+
+        # Write your variables into .env
+        - echo "BEDROCK_MODEL_ID=$BEDROCK_MODEL_ID" >> .env
+        - echo "BEDROCK_AWS_REGION=$BEDROCK_AWS_REGION" >> .env
+        - echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> .env
+        - echo "BEDROCK_AWS_ACCESS_KEY_ID=$BEDROCK_AWS_ACCESS_KEY_ID" >> .env
+        - echo "BEDROCK_AWS_SECRET_ACCESS_KEY=$BEDROCK_AWS_SECRET_ACCESS_KEY" >> .env
+        - echo "DEFAULT_REPO=$DEFAULT_REPO" >> .env
+
+        - npm ci
+
+        # Return to the root directory
+        - cd ../../..
+
+        - echo "Deploying backend via ampx..."
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+
 frontend:
   phases:
     build:
@@ -17,4 +39,3 @@ frontend:
   cache:
     paths:
       - .npm/**/*
-      - node_modules/**/*

@@ -1,17 +1,50 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { a, defineData, defineFunction, type ClientSchema, secret  } from '@aws-amplify/backend';
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any user authenticated via an API key can "create", "read",
-"update", and "delete" any "Todo" records.
-=========================================================================*/
+export const agentHandler = defineFunction({
+  name: 'agentHandler',
+  entry: '../functions/agentHandler/agentHandler.ts',
+  timeoutSeconds: 900, // (max: 900)
+  environment: {
+    GITHUB_TOKEN: secret('GITHUB_TOKEN'),
+    BEDROCK_MODEL_ID: process.env.BEDROCK_MODEL_ID!,
+    BEDROCK_AWS_REGION: process.env.BEDROCK_AWS_REGION!,
+    BEDROCK_AWS_ACCESS_KEY_ID: secret('BEDROCK_AWS_ACCESS_KEY_ID'),
+    BEDROCK_AWS_SECRET_ACCESS_KEY: secret('BEDROCK_AWS_SECRET_ACCESS_KEY'),
+    DEFAULT_REPO: process.env.DEFAULT_REPO!,
+  },
+});
+
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
+  Log: a.model({
+    id: a.id(),
+    message: a.string(),
+  })
+  .authorization((allow) => [allow.guest()]),
+
+  
+  AllowedMessageType: a.enum(["human", "ai", "system", "tool", "generic"]),
+
+  Message: a.customType({
+    type: a.ref("AllowedMessageType"),
+    content: a.string(),
+    tool_call_id: a.string(),
+  }),
+
+  AgentResponse: a.customType({
+    reply: a.string(),
+    messages: a.ref("Message").array(),
+  }),
+
+  runAgent: a
+    .mutation()
+    .arguments({
+      input: a.string(),
+      history: a.ref("Message").array(),
     })
-    .authorization((allow) => [allow.publicApiKey()]),
+    .returns(a.ref("AgentResponse"))
+    .authorization((allow) => [allow.publicApiKey()])
+    // .authorization((allow) => [allow.authenticated()])
+    .handler(a.handler.function(agentHandler)),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -19,39 +52,9 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
-    // API Key is used for a.allow.public() rules
+    defaultAuthorizationMode: 'apiKey',
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
     },
   },
 });
-
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server 
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
-=========================================================================*/
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
