@@ -1,4 +1,5 @@
 import { Amplify } from "aws-amplify";
+import { parseAmplifyConfig } from "aws-amplify/utils";
 import outputs from "../amplify_outputs.json";
 
 import React, { useState } from "react";
@@ -8,7 +9,13 @@ import App from "./App";
 import Layout from "./components/Layout";
 import "./index.css";
 
-Amplify.configure(outputs);
+const amplifyConfig = parseAmplifyConfig(outputs);
+
+Amplify.configure({
+  ...amplifyConfig,
+  Predictions: outputs.custom.Predictions,
+});
+
 
 function Root() {
   const [showInstructions, setShowInstructions] = useState(() => {

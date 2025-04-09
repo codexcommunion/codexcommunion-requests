@@ -1,11 +1,17 @@
 import { a, defineData, defineFunction, type ClientSchema, secret  } from '@aws-amplify/backend';
 
+const IS_SANDBOX = process.env.AMPLIFY_ENV === 'sandbox';
+console.log("AMPLIFY_ENV", process.env.AMPLIFY_ENV);
+console.log('IS_SANDBOX', IS_SANDBOX);
+
 export const agentHandler = defineFunction({
   name: 'agentHandler',
   entry: '../functions/agentHandler/agentHandler.ts',
   timeoutSeconds: 900, // (max: 900)
   environment: {
-    GITHUB_TOKEN: secret('GITHUB_TOKEN'),
+    GITHUB_TOKEN:  IS_SANDBOX
+    ? process.env.GITHUB_TOKEN!
+    : secret('GITHUB_TOKEN'),
     BEDROCK_MODEL_ID: process.env.BEDROCK_MODEL_ID!,
     BEDROCK_AWS_REGION: process.env.BEDROCK_AWS_REGION!,
     DEFAULT_REPO: process.env.DEFAULT_REPO!,

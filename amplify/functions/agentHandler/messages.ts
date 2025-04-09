@@ -43,12 +43,15 @@ export function normalizeAIContent(
   return text;
 }
 
-export const withId = <T extends BaseMessageFields>(message: T): T & { id?: string } => {
+export const withId = <T extends { id?: string | null } & { content: string }>(
+  message: T
+): T & { id: string } => {
   return {
     ...message,
     id: message.id ?? uuid(),
   };
 };
+
 
 export function toAllowedType(type: string): "human" | "ai" | "system" | "tool" | "generic" {
   switch (type) {

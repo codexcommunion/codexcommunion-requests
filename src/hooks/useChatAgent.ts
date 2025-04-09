@@ -27,7 +27,9 @@ export function useChatAgent() {
     setLoading(true);
 
     try {
-      const client = generateClient<Schema>();
+      const client = generateClient<Schema>({
+        authMode: 'userPool'
+      });
       const { data, errors } = await client.mutations.runAgent({
         input: message.content,
         history: history,
