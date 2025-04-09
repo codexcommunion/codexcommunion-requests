@@ -17,11 +17,12 @@ import { getIssueTool } from "./tools/getIssueTool";
 import { listIssuesTool } from "./tools/listIssuesTool";
 import { addIssueCommentTool } from "./tools/addIssueCommentTool";
 import { searchIssuesTool } from "./tools/searchIssuesTool";
+import { withId } from "./messages";
 
 const tools = [
   createIssueTool,
   getIssueTool,
-  listIssuesTool,
+  // listIssuesTool,
   addIssueCommentTool,
   searchIssuesTool,
 ];
@@ -32,34 +33,43 @@ const llmWithTools = llm.bindTools(tools);
 export const handler: Schema["runAgent"]["functionHandler"] = async (
   event,
   context
-) => {
+): Promise<{
+  reply: string;
+  messages: {
+    tool_call_id?: string;
+    type: "human" | "ai" | "system" | "tool" | "generic";
+    content: string;
+  }[];
+}> => {
   try {
     const input = event.arguments.input;
     const history = event.arguments.history ?? [];
 
     const validHistory = history.filter(
       (msg): msg is NonNullable<typeof msg> =>
-        msg != null && msg.type !== "tool"
+        msg != null && msg.type !== "tool"  // filter out tool messages from history, tool calls are handled in action loop
     );
 
     const messages = [
+      //TODO: to avoid clients specifying the system message, we should add it using the system prompt each time
       ...(!validHistory.some((msg) => msg.type === "system")
-        ? [new SystemMessage(systemPrompt)]
+        ? [new SystemMessage(withId({ content: systemPrompt }))]
         : []),
       ...validHistory.map((msg) => {
         const content = msg.content ?? "[missing content]";
+        const base = withId({ content, id: msg.id });
         switch (msg.type) {
           case "human":
-            return new HumanMessage(content);
+            return new HumanMessage(base);
           case "ai":
-            return new AIMessage(content);
+            return new AIMessage(base);
           case "tool":
             return new ToolMessage({
+              ...base,
               tool_call_id: msg.tool_call_id ?? "unknown-tool",
-              content,
             });
           case "system":
-            return new SystemMessage(content);
+            return new SystemMessage(base);
           default:
             throw new Error(`Unknown or missing message type: ${msg.type}`);
         }
@@ -67,7 +77,7 @@ export const handler: Schema["runAgent"]["functionHandler"] = async (
     ];
 
     if (!input) throw new Error("Missing input");
-    messages.push(new HumanMessage(input));
+    messages.push(new HumanMessage(withId({ content: input })));
 
     const intent: UserIntent = await classifyInputIntent(messages, input);
 
@@ -91,12 +101,10 @@ export const handler: Schema["runAgent"]["functionHandler"] = async (
         reply = normalizeAIContent(aiMessage.content, true);
 
         //we will need to put a more user-friendly message without JSON to the history
-        messages.push(
-          new AIMessage({
-            ...aiMessage,
-            content: reply, // override just the content
-          })
-        );
+        messages.push(new AIMessage(withId({
+          ...aiMessage,
+          content: reply,
+        })));
 
         const toolCalls = aiMessage.tool_calls ?? [];
 
@@ -109,10 +117,12 @@ export const handler: Schema["runAgent"]["functionHandler"] = async (
           if (!tool) continue;
 
           const toolResult = await tool.invoke(call);
-          const toolMessage = new ToolMessage({
-            tool_call_id: call.id ?? call.name,
-            content: toolResult,
-          });
+          const toolMessage = new ToolMessage(
+            withId({
+              tool_call_id: call.id ?? call.name,
+              content: toolResult,
+            })
+          );
 
           toolMessages.push(toolMessage);
         }
@@ -140,12 +150,13 @@ export const handler: Schema["runAgent"]["functionHandler"] = async (
         }
 
     } else {
-      messages.push(new AIMessage(reply));
+      messages.push(new AIMessage(withId({ content: reply })));
     }
 
     return {
       reply,
       messages: messages.map((m) => ({
+        id: m.id,
         type: toAllowedType(m._getType()),
         content:
           typeof m.content === "string"

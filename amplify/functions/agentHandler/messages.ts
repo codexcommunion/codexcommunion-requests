@@ -1,4 +1,5 @@
-import { HumanMessage, AIMessage, SystemMessage, ToolMessage, MessageContent } from "@langchain/core/messages";
+import { HumanMessage, AIMessage, SystemMessage, ToolMessage, MessageContent, BaseMessageFields } from "@langchain/core/messages";
+import { v4 as uuid } from "uuid";
 
 export function stringifyMessage(msg: AIMessage | HumanMessage | SystemMessage | ToolMessage): string {
   const role = msg._getType().toUpperCase();
@@ -42,6 +43,12 @@ export function normalizeAIContent(
   return text;
 }
 
+export const withId = <T extends BaseMessageFields>(message: T): T & { id?: string } => {
+  return {
+    ...message,
+    id: message.id ?? uuid(),
+  };
+};
 
 export function toAllowedType(type: string): "human" | "ai" | "system" | "tool" | "generic" {
   switch (type) {

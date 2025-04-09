@@ -8,6 +8,7 @@
     "@langchain/core": "^0.3.43",
     "@langchain/langgraph": "^0.2.62",
     "@octokit/rest": "^21.1.1",
+    "uuid": "^11.1.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
