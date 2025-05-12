@@ -1,3 +1,4 @@
+
 /* General container styling for the Authenticator */
 [data-amplify-authenticator] {
   display: flex;
@@ -19,6 +20,7 @@
   border-radius: 0.5rem; /* Rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
+
 
 /* Style the tabs (Sign In / Sign Up) */
 .amplify-tabs__list {
@@ -68,6 +70,8 @@
   margin-bottom: 0.5rem;
 }
 
+
+
 /* Style the buttons */
 .amplify-button {
   display: inline-block;
@@ -81,6 +85,7 @@
   border: none;
   border-radius: 0.375rem; /* Rounded corners */
   cursor: pointer;
+  margin: 1rem 0;
   transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
@@ -93,22 +98,25 @@
   cursor: not-allowed;
 }
 
-/* Style the "Show Password" button */
 .amplify-field__show-password {
-  background: none;
-  border: none;
-  color: #6b7280; /* Gray text */
-  cursor: pointer;
-  transition: color 0.2s ease-in-out;
+  display: none !important;
 }
 
-.amplify-field__show-password:hover {
-  color: #1f2937; /* Darker gray on hover */
-}
+
 
 /* Style error messages */
 .amplify-error {
   color: #dc2626; /* Red text for errors */
   font-size: 0.875rem;
   margin-top: 0.5rem;
+}
+
+
+/* Make sure buttons and links show pointer cursor */
+button,
+.amplify-button,
+.amplify-button--link,
+a,
+.amplify-tabs__item {
+  cursor: pointer;
 }

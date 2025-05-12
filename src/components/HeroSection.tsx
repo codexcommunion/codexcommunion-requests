@@ -68,6 +68,8 @@ export default function HeroSection({ onStart }: HeroSectionProps) {
       >
         Start Chatting
       </button>
+      <p className="mt-4 text-sm text-gray-500">
+        This tool is free, the sign up is just to help avoid spam/abuse of the system. It's quick and easy and we won't spam you either.</p>
     </section>
   );
 }
