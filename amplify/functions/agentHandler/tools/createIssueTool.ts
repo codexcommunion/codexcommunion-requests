@@ -2,7 +2,7 @@ import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { Octokit } from "@octokit/rest";
 
-const repo = process.env.DEFAULT_REPO;
+const repo = process.env.DEFAULT_REPO!;
 
 export const createIssueTool = tool(
   async ({ owner, title, body }) => {
