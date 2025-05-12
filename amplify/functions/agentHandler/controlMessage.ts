@@ -1,4 +1,5 @@
 import { BaseMessage, BaseMessageFields, MessageType } from "@langchain/core/messages";
+import { v4 as uuid } from "uuid";
 
 export interface ControlMessageFields extends BaseMessageFields {
   content: string;
@@ -10,6 +11,7 @@ export class ControlMessage extends BaseMessage {
   }
 
   constructor(fields: ControlMessageFields) {
+    const id = fields.id ?? uuid();
     super({ ...fields, });
   }
 
