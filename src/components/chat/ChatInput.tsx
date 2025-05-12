@@ -1,6 +1,7 @@
 import { Message } from "../../types";
 import { IconArrowUp } from "@tabler/icons-react";
 import { FC, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface Props {
   onSend: (message: Message) => void;
@@ -26,7 +27,7 @@ export const ChatInput: FC<Props> = ({ onSend }) => {
       alert("Please enter a message");
       return;
     }
-    onSend({ type: "human", content: content.trim() });
+    onSend({ id: uuidv4(), type: "human", content: content.trim() });
     setContent("");
   };
 
