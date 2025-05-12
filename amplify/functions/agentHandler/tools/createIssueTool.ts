@@ -2,8 +2,10 @@ import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { Octokit } from "@octokit/rest";
 
+const repo = process.env.DEFAULT_REPO;
+
 export const createIssueTool = tool(
-  async ({ owner, repo, title, body }) => {
+  async ({ owner, title, body }) => {
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
     const result = await octokit.issues.create({
       owner,
@@ -18,7 +20,6 @@ export const createIssueTool = tool(
     description: "Create a new GitHub issue",
     schema: z.object({
       owner: z.string(),
-      repo: z.string(),
       title: z.string(),
       body: z.string().optional(),
     }),
