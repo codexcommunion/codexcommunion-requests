@@ -9,7 +9,7 @@ const linkRenderer: Components = {
       {...props}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-blue-600 underline hover:opacity-80"
+      className="text-[var(--color-marian-blue-500)] underline hover:text-[var(--color-immaculate-heart-blue-600)] transition"
     />
   ),
 };
@@ -21,13 +21,14 @@ function ThinkingBlock({ text }: { text: string }) {
   return (
     <div className="mb-2 text-sm text-gray-600">
       <button
-        className="text-blue-500 underline"
+        className="text-[var(--color-marian-blue-500)] underline hover:text-[var(--color-immaculate-heart-blue-600)] transition"
+
         onClick={() => setExpanded(!expanded)}
       >
         {expanded ? "Hide AI Thinking" : "Show AI Thinking"}
       </button>
       {expanded && (
-        <div className="mt-1 p-2 bg-gray-100 border border-gray-300 rounded">
+        <div className="mt-1 p-2 bg-[var(--color-incense-smoke-100)] border border-[var(--color-incense-smoke-300)] rounded">
           <ReactMarkdown components={linkRenderer}>
             {text}
           </ReactMarkdown>
@@ -59,16 +60,16 @@ export function ChatMessage({ message }: { message: Message }) {
   return (
     <div className={`flex ${isAI ? "justify-start" : "justify-end"}`}>
       <div
-        className={`w-full max-w-[80%] ${
-          !isAI ? "rounded-2xl px-4 py-2 bg-blue-500 text-white whitespace-pre-wrap" : ""
+        className={`w-full max-w-[80%] ${ 
+          !isAI ? "rounded-2xl px-4 py-2 bg-[var(--color-marian-blue-300)] text-[var(--color-liturgical-white)] hover:bg-[var(--color-marian-blue-200)] whitespace-pre-wrap" : ""
         }`}
       >
         {isAI ? (
-          <div className="prose prose-lg sm:prose-base prose-neutral dark:prose-invert">
+          <div className="prose prose-lg sm:prose-base prose-neutral dark:prose-invert bg-[var(--color-incense-smoke-200)] hover:bg-[var(--color-incense-smoke-50)] px-4 py-2 rounded-2xl">
+            <ReactMarkdown components={linkRenderer}>{strippedContent}</ReactMarkdown>
             {thinkingBlocks.map((text, i) => (
               <ThinkingBlock key={i} text={text} />
             ))}
-            <ReactMarkdown components={linkRenderer}>{strippedContent}</ReactMarkdown>
           </div>
         ) : (
           // non-AI messages (human/tool/etc) with no prose styling

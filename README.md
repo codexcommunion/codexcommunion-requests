@@ -12,9 +12,25 @@ This template equips you with a foundational React application integrated with A
 - **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
 - **Database**: Real-time database powered by Amazon DynamoDB.
 
+## Running locally (via AWS Amplify Sandbox)
+
+To run the application locally, follow these steps:
+- aws configure sso (if not already configured)
+- aws sso login --profile codexcommunion-profile
+- npm run sandbox
+
+then in another terminal:
+- npm run dev
+
 ## Deploying to AWS
 
 For detailed instructions on deploying your application, refer to the [deployment section](https://docs.amplify.aws/react/start/quickstart/#deploy-a-fullstack-app-to-aws) of our documentation.
+
+There are a few prerequisites needed in Amplify:
+- Various Environment Variables and Secrets. Check the `amplify.yml` file to see the variables that are referenced which need to be set in the Amplify Console.
+- NOTE: some of these are sensitive and should be set as secrets in the Amplify Console (TODO)
+
+The build/runner machine also needs to have Node 22, which is not the default, this needs to be changed.
 
 ## Security
 

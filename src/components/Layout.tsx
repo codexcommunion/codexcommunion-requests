@@ -8,14 +8,14 @@ type LayoutProps = {
 
 export default function Layout({ children, onShowInstructions, showInstructions }: LayoutProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-neutral-50 text-gray-800">
-     <header className="bg-white text-gray-900 shadow-sm sticky top-0 z-30">
+    <div className="flex flex-col min-h-screen bg-[var(--color-incense-smoke-100)] text-[var(--color-liturgical-black-700)]">
+     <header role="banner" className="bg-[var(--color-liturgical-white)] text-[var(--color-liturgical-black)] shadow-sm sticky top-0 z-30">
       <div className="max-w-6xl mx-auto flex items-center justify-between py-6 px-4">
         <div className="flex items-center gap-3">
           <img
             src="/CxC_logo.png"
             alt="CodexCommunion Logo"
-            className="h-12 w-12 rounded-full object-cover ring-1 ring-yellow-400"
+            className="h-12 w-12 rounded-full object-cover ring-1 ring-[var(--color-liturgical-gold-400)]"
           />
           <span className="text-3xl font-semibold tracking-tight">
             CodexCommunion Requests
@@ -25,7 +25,7 @@ export default function Layout({ children, onShowInstructions, showInstructions 
         {onShowInstructions && (
           <button
             onClick={onShowInstructions}
-            className="text-sm text-blue-600 hover:text-blue-800 underline"
+            className="text-sm text-[var(--color-marian-blue-500)] hover:text-[var(--color-immaculate-heart-blue-600)] underline"
           >
             {showInstructions ? "Hide Instructions" : "Show Instructions"}
           </button>
@@ -33,13 +33,14 @@ export default function Layout({ children, onShowInstructions, showInstructions 
       </div>
     </header>
 
-      <main className="flex-1">{children}</main>
+      <main role="main" className="flex-1">{children}</main>
 
-      <footer className="bg-white border-t border-neutral-300 px-4 py-3 shadow-inner">
-        <div className="max-w-3xl mx-auto text-sm text-neutral-500 text-center">
-          &copy; {new Date().getFullYear()} CodexCommunion. All rights reserved.
-        </div>
-      </footer>
+    <footer role="contentinfo" className="mt-8 bg-[var(--color-liturgical-white)] border-t border-[var(--color-incense-smoke-400)] px-4 py-3 shadow-inner">
+      <div className="max-w-3xl mx-auto text-sm text-[var(--color-incense-smoke-700)] text-center">
+        &copy; {new Date().getFullYear()} CodexCommunion. All rights reserved.
+      </div>
+    </footer>
+
     </div>
   );
 }

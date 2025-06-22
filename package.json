@@ -17,6 +17,7 @@
     "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/vite": "^4.1.1",
     "aws-amplify": "^6.14.1",
+    "catholic-css": "^1.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0"

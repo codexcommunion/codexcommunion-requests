@@ -6,8 +6,8 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f9fafb; /* Light gray background */
-  color: #1f2937; /* Dark gray text */
+  background-color: var(--color-incense-smoke-100); /* soft pale background */
+  color: var(--color-liturgical-black-700); /* lightened black */
 }
 
 /* Style the form container */
@@ -15,8 +15,8 @@
   width: 100%;
   max-width: 400px;
   padding: 1rem;
-  background-color: #ffffff; /* White background */
-  border: 1px solid #e5e7eb; /* Light border */
+  background-color: var(--color-liturgical-white);
+  border: 1px solid var(--color-incense-smoke-300);
   border-radius: 0.5rem; /* Rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
@@ -27,21 +27,21 @@
   display: flex;
   justify-content: space-around;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-incense-smoke-400);
 }
 
 .amplify-tabs__item {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   font-weight: 500;
-  color: #6b7280; /* Gray text */
+  color: var(--color-incense-smoke-700);
   cursor: pointer;
   transition: color 0.2s ease-in-out, border-bottom 0.2s ease-in-out;
 }
 
 .amplify-tabs__item--active {
-  color: #1f2937; /* Darker gray for active tab */
-  border-bottom: 2px solid #2563eb; /* Blue underline for active tab */
+  color: var(--color-liturgical-black);
+  border-bottom: 2px solid var(--color-marian-blue-500);
 }
 
 /* Style the input fields */
@@ -49,16 +49,16 @@
   width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
-  border: 1px solid #d1d5db; /* Light gray border */
+  border: 1px solid var(--color-incense-smoke-400);
   border-radius: 0.375rem; /* Rounded corners */
-  background-color: #f9fafb; /* Light gray background */
-  color: #1f2937; /* Dark gray text */
+  background-color: var(--color-incense-smoke-100);
+  color: var(--color-liturgical-black);
   transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .amplify-input:focus {
-  border-color: #2563eb; /* Blue border on focus */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); /* Blue focus ring */
+  border-color: var(--color-marian-blue-400);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-marian-blue-300) 30%, transparent);
   outline: none;
 }
 
@@ -66,7 +66,7 @@
 .amplify-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151; /* Medium gray text */
+  color: var(--color-incense-smoke-800);
   margin-bottom: 0.5rem;
 }
 
@@ -80,8 +80,8 @@
   font-size: 1rem;
   font-weight: 600;
   text-align: center;
-  color: #ffffff; /* White text */
-  background-color: #2563eb; /* Blue background */
+  color: var(--color-liturgical-white);
+  background-color: var(--color-marian-blue-400);
   border: none;
   border-radius: 0.375rem; /* Rounded corners */
   cursor: pointer;
@@ -90,11 +90,11 @@
 }
 
 .amplify-button:hover {
-  background-color: #1d4ed8; /* Darker blue on hover */
+  background-color: var(--color-immaculate-heart-blue-400); /* Darker blue on hover */
 }
 
 .amplify-button:disabled {
-  background-color: #9ca3af; /* Gray background for disabled state */
+  background-color: var(--color-incense-smoke-500); /* Gray background for disabled state */
   cursor: not-allowed;
 }
 
@@ -106,7 +106,7 @@
 
 /* Style error messages */
 .amplify-error {
-  color: #dc2626; /* Red text for errors */
+  color: var(--color-liturgical-red-600);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
@@ -119,4 +119,86 @@ button,
 a,
 .amplify-tabs__item {
   cursor: pointer;
+}
+
+
+/* General link styling */
+a {
+  color: var(--color-marian-blue-500);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover,
+a:focus {
+  color: var(--color-immaculate-heart-blue-600);
+  text-decoration: none;
+}
+
+/* Button: primary and secondary styles */
+.amplify-button--primary {
+  background-color: var(--color-marian-blue-500);
+  color: var(--color-liturgical-white);
+}
+
+.amplify-button--primary:hover {
+  background-color: var(--color-marian-blue-600);
+}
+
+.amplify-button--secondary {
+  background-color: var(--color-monastery-stone-400);
+  color: var(--color-liturgical-black);
+}
+
+.amplify-button--secondary:hover {
+  background-color: var(--color-monastery-stone-500);
+}
+
+/* Input and button focus ring fallback (in case browser doesn't support color-mix) */
+:focus {
+  outline: 2px solid var(--color-marian-blue-300);
+  outline-offset: 2px;
+}
+
+/* Utility card styling (can be applied to containers) */
+.card {
+  background-color: var(--color-liturgical-white);
+  border: 1px solid var(--color-incense-smoke-300);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Smooth transitions for all interactive elements */
+a,
+button,
+input,
+textarea,
+select {
+  transition: all 0.2s ease-in-out;
+}
+
+
+body {
+  font-family: system-ui, sans-serif;
+  color: var(--color-liturgical-black-700);
+  background-color: var(--color-incense-smoke-100);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-liturgical-black);
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin-bottom: 1em;
 }

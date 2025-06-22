@@ -49,7 +49,12 @@ export const ChatInput: FC<Props> = ({ onSend }) => {
     <div className="relative h-full">
       <textarea
         ref={textareaRef}
-        className="h-full w-full rounded-lg pl-4 pr-12 py-2 focus:outline-none focus:ring-1 focus:ring-neutral-300 border-2 border-neutral-200 resize-none"
+        className="h-full w-full rounded-lg pl-4 pr-12 py-2
+          bg-[var(--color-liturgical-white)] text-[var(--color-liturgical-black)]
+          border-2 border-[var(--color-incense-smoke-300)]
+          focus:outline-none focus:ring-2 focus:ring-[var(--color-marian-blue-300)]
+          placeholder:text-[var(--color-incense-smoke-700)]
+          resize-none transition"
         placeholder="I have an idea to..."
         value={content}
         onChange={handleChange}
@@ -57,10 +62,15 @@ export const ChatInput: FC<Props> = ({ onSend }) => {
       />
       <button
         onClick={handleSend}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full bg-blue-500 text-white hover:opacity-80"
+        aria-label="Send message"
+        title="Send message"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full
+          bg-[var(--color-marian-blue-500)] text-[var(--color-liturgical-white)]
+          hover:bg-[var(--color-marian-blue-600)] transition"
       >
         <IconArrowUp className="h-6 w-6" />
       </button>
     </div>
+
   );
 };
